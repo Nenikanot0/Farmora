@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const cropReportSchema=new mongoose.Schema({
-    userId:{                                 //foreign key
+    userId:{                                 //foreign key:
         type:mongoose.Schema.Types.ObjectId, //specify that not a normal string 
         ref: "User",                         //but a document in User collection
         required:true
@@ -10,9 +10,12 @@ const cropReportSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    imageUrl:{
+    symptoms:{
         type:String,
         required:true
+    },
+    imageUrl:{
+        type:String,
     },
     diseasePrediction:{
         type:String,
