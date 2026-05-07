@@ -1,12 +1,14 @@
 import express from "express";
-import dotenv from 'dotenv';
+import "dotenv/config" ;
+
 import cors from 'cors';
 import helmet from 'helmet';
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import cropRoutes from "./routes/cropRoutes.js";
+import weatherRoutes from "./routes/weatherRoutes.js"
 
-dotenv.config();
+
 const app = express();
 
 connectDB();
@@ -22,9 +24,12 @@ app.use("/uploads", express.static("uploads"));
 
 // --- ROUTES ---
 
+// server.js
 
 app.use("/api/auth", authRoutes);
 app.use("/api/crop", cropRoutes);
+app.use("/api/weather",weatherRoutes);
+
 
 app.get("/", (req, res) => { 
     res.send("KrishiMitra API Running");
