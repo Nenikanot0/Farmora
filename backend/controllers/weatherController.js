@@ -2,17 +2,57 @@ import { generateWeatherAdvice } from "../utils/aiWeatherService.js"; //from gem
 import {getWeatherByCity} from "../utils/weatherService.js"; //get weather of city
 export const getWeather=async(req,res) => {
     try{
-        const {city}=req.body;
-        if(!city){
-            return res.status(400).json({ message: "Please provide city/district name" });
+        const {village,city,district,crop,stage}=req.body;
+
+        const validStages = [
+            "seedling",
+            "vegetative",
+            "flowering",
+            "harvest"
+            ];
+
+        if(!village && !district && !city){
+            return res.status(400).json({message:"Please provide a village, city, or district name."});
+        }
+        
+        let weatherData=null;
+        let resolvedAt="";
+
+        try{
+            if(village){
+                weatherData=await getWeatherByCity(village);
+                resolvedAt="village";
+            }
+        }catch(err){}
+
+        if(!weatherData && city){
+            try{
+                weatherData=await getWeatherByCity(city);
+                resolvedAt="city";
+            }catch(err){}
+        }
+        if(!weatherData && district){
+            try{
+                weatherData=await getWeatherByCity(district);
+                resolvedAt="district";
+            }catch(err){}
         }
 
-        const weatherData=await getWeatherByCity(city);
+        if (!weatherData) {
+            throw new Error("Location not recognized by weather service.");
+        }
 
-        const farmingAdvice=await generateWeatherAdvice(weatherData); 
+        if(!validStages.includes(stage.toLowerCase())){
+            return res.status(400).json({message:"Please provide a correct crop stage."});
+        }
+
+        const farmingAdvice=await generateWeatherAdvice(weatherData,crop,stage); 
         
         res.status(200).json({
-            message: "Smart weather analysis completed",
+            message: "Crop-specific weather analysis completed",
+            crop,
+            stage,
+            resolvedAt,
             weatherData,
             farmingAdvice
         });
