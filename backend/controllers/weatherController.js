@@ -1,5 +1,7 @@
 import { generateWeatherAdvice } from "../utils/aiWeatherService.js"; //from gemini
 import {getWeatherByCity} from "../utils/weatherService.js"; //get weather of city
+import WeatherRiskReport from "../models/WeatherRiskReport.js";
+
 export const getWeather=async(req,res) => {
     try{
         const {village,city,district,crop,stage}=req.body;
@@ -18,9 +20,11 @@ export const getWeather=async(req,res) => {
         let weatherData=null;
         let resolvedAt="";
 
+        let location="";
         try{
             if(village){
                 weatherData=await getWeatherByCity(village);
+                location=village;
                 resolvedAt="village";
             }
         }catch(err){}
@@ -28,12 +32,14 @@ export const getWeather=async(req,res) => {
         if(!weatherData && city){
             try{
                 weatherData=await getWeatherByCity(city);
+                location=city;
                 resolvedAt="city";
             }catch(err){}
         }
         if(!weatherData && district){
             try{
                 weatherData=await getWeatherByCity(district);
+                location=city;
                 resolvedAt="district";
             }catch(err){}
         }
@@ -48,13 +54,18 @@ export const getWeather=async(req,res) => {
 
         const farmingAdvice=await generateWeatherAdvice(weatherData,crop,stage); 
         
-        res.status(200).json({
-            message: "Crop-specific weather analysis completed",
+        const savedReport = await WeatherRiskReport.create({
+            userId:req.user,
+            location,
             crop,
             stage,
-            resolvedAt,
             weatherData,
-            farmingAdvice
+            farmingAnalysis:farmingAdvice
+        });
+
+        res.status(200).json({
+            message:"Weather risk report generated and saved",
+            savedReport
         });
 
     }catch(error){

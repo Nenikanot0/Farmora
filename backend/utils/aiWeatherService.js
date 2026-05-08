@@ -19,11 +19,18 @@ export const generateWeatherAdvice=async(weatherData,crop,stage) => {  //weather
 
             Required JSON Structure:
             {
-                "riskScore": "Low/Moderate/High",
-                "risks": ["Short label (e.g. Weed Competition)", "Short label (e.g. Stem Borer)"],
-                "recommendations": ["Actionable step 1", "Actionable step 2"],
-                "precaution": "One short warning sentence"
+                "riskScore": "Low or Moderate or High",
+                "riskPercentage": number (0-100),
+                "risks": ["risk1", "risk2", "risk3"],
+                "irrigationAdvice": "string",
+                "pesticideAdvice": "string",
+                "cropSafetyAdvice": "string"
             }
+
+            Rules:
+            - Low = 0-39
+            - Moderate = 40-69
+            - High = 70-100
 
             Tone: Professional and short yet very simple. Use terms a local farmer understands. Keep it concise.
         `;
