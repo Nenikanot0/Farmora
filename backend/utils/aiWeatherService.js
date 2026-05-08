@@ -9,30 +9,42 @@ export const generateWeatherAdvice=async(weatherData,crop,stage) => {  //weather
         const prompt = `
             Act as a hyper-local agricultural scientist.
             
-            Location Context: 
-            - The farmer is in/near: ${weatherData.location}
+            Context: 
+            - Location: ${weatherData.location}
             - Crop: ${crop}
             - Growth Stage: ${stage}
-
-            Current Weather Conditions at ${weatherData.location}:
-            - Temperature: ${weatherData.temperature}°C
-            - Humidity: ${weatherData.humidity}%
-            - Condition: ${weatherData.weather}
-            - Wind Speed: ${weatherData.windSpeed} m/s
-
+            - Weather: ${weatherData.temperature}°C, ${weatherData.humidity}% humidity, ${weatherData.weather}.
             Task:
-            Provide a localized agricultural analysis for a farmer growing ${crop} at the ${stage} stage.
+            Provide a localized agricultural analysis for a farmer growing ${crop} at the ${stage} stage in ${weatherData.location}.
 
-            Structure your response exactly like this:
-            1. **Disease Risk Score**: [Low/Moderate/High] based on current humidity and temp.
-            2. **Local Risks**: Identify specific threats (e.g., fungal, pests, or water stress) relevant to the ${stage} stage.
-            3. **Actionable Steps**: 3 clear, simple steps the farmer should take in the next 24-48 hours.
-            4. **Stage-Specific Precaution**: One critical warning specific to the ${stage} of ${crop}.
+            Required JSON Structure:
+            {
+                "riskScore": "Low/Moderate/High",
+                "risks": ["Short label (e.g. Weed Competition)", "Short label (e.g. Stem Borer)"],
+                "recommendations": ["Actionable step 1", "Actionable step 2"],
+                "precaution": "One short warning sentence"
+            }
 
             Tone: Professional and short yet very simple. Use terms a local farmer understands. Keep it concise.
         `;
         const result = await model.generateContent(prompt);
-        return result.response.text();
+        let responseText = result.response.text();
+
+        responseText = responseText
+            .replace(/```json/g, "")  //start of string
+            .replace(/```/g, "")      //end of string
+            .trim();
+ 
+        const firstChar = responseText.indexOf('{');
+        const lastChar = responseText.lastIndexOf('}');
+        
+        if (firstChar === -1 || lastChar === -1) {
+            throw new Error("AI did not return a valid JSON block");
+        }
+
+        const jsonString = responseText.substring(firstChar, lastChar + 1); //extracts the info between '{' and '}' only
+
+        return JSON.parse(jsonString);  //converts to json string to object
 
     }catch(error){
         throw new Error("AI weather advice failed: " + error.message);
