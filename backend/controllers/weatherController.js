@@ -39,7 +39,7 @@ export const getWeather=async(req,res) => {
         if(!weatherData && district){
             try{
                 weatherData=await getWeatherByCity(district);
-                location=city;
+                location=district;
                 resolvedAt="district";
             }catch(err){}
         }
@@ -54,6 +54,8 @@ export const getWeather=async(req,res) => {
 
         const farmingAdvice=await generateWeatherAdvice(weatherData,crop,stage); 
         
+        console.log("Type of req.user:", typeof req.user, "Value:", req.user);
+
         const savedReport = await WeatherRiskReport.create({
             userId:req.user,
             location,
@@ -62,6 +64,7 @@ export const getWeather=async(req,res) => {
             weatherData,
             farmingAnalysis:farmingAdvice
         });
+
 
         res.status(200).json({
             message:"Weather risk report generated and saved",
@@ -74,3 +77,24 @@ export const getWeather=async(req,res) => {
         });
     }
 }
+
+export const getMyWeatherReports = async (req,res) => {
+    try {
+        const reports =
+            await WeatherRiskReport.find({
+                userId:req.user,
+            }).sort({
+                createdAt: -1
+            });
+
+        res.status(200).json({
+            count: reports.length,
+            reports
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
