@@ -18,21 +18,30 @@ const weatherRiskReportSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    language:{
+        type:String,
+    },
     weatherData:{
         location:String,
-        temperature:String,
-        humidity:String,
+        temperature:Number,
+        humidity:Number,
         weather:String,
         windSpeed:Number
     },
     farmingAnalysis:{
         riskScore:String,
         riskPercentage:Number,
+        diseaseCategory:String,
         risks:[String],
         irrigationAdvice:String,
         pesticideAdvice: String,
         cropSafetyAdvice: String
     },
+    alertLevel:{
+        type:String,
+        enum:["Safe","Warning","Critical"],
+        default:"Safe"
+    }
 },{timestamps:true});
 
 const WeatherRiskReport=mongoose.model("WeatherRiskReport",weatherRiskReportSchema);

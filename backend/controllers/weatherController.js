@@ -4,14 +4,10 @@ import WeatherRiskReport from "../models/WeatherRiskReport.js";
 
 export const getWeather=async(req,res) => {
     try{
-        const {village,city,district,crop,stage}=req.body;
+        const {village,city,district,crop,stage,language="English"}=req.body;
 
-        const validStages = [
-            "seedling",
-            "vegetative",
-            "flowering",
-            "harvest"
-            ];
+        const validStages = ["seedling","vegetative","flowering","harvest"];
+
 
         if(!village && !district && !city){
             return res.status(400).json({message:"Please provide a village, city, or district name."});
@@ -36,6 +32,7 @@ export const getWeather=async(req,res) => {
                 resolvedAt="city";
             }catch(err){}
         }
+        
         if(!weatherData && district){
             try{
                 weatherData=await getWeatherByCity(district);
@@ -52,17 +49,24 @@ export const getWeather=async(req,res) => {
             return res.status(400).json({message:"Please provide a correct crop stage."});
         }
 
-        const farmingAdvice=await generateWeatherAdvice(weatherData,crop,stage); 
+        const farmingAdvice=await generateWeatherAdvice(weatherData,crop,stage,language); 
         
-        console.log("Type of req.user:", typeof req.user, "Value:", req.user);
+        const alertLevel =  farmingAdvice.riskPercentage>=85 ? "Critical" : farmingAdvice.riskPercentage >= 70 ? "Warning" : "Safe";
+
+        if(alertLevel==="Critical"){
+            //replace print to sms api,whatsapp api or email 
+            console.log(`Alert: ${crop} in ${location} at ${stage} stage has CRITICAL risk`);
+        }
 
         const savedReport = await WeatherRiskReport.create({
             userId:req.user,
             location,
             crop,
             stage,
+            language,
             weatherData,
-            farmingAnalysis:farmingAdvice
+            farmingAnalysis:farmingAdvice,
+            alertLevel
         });
 
 

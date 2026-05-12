@@ -18,7 +18,11 @@ const cropReportSchema=new mongoose.Schema({
         type:String,
     },
     diseasePrediction:{
-        type:String,
+        diseaseName: String,
+        causes: [String],
+        treatment: [String],
+        prevention: [String],
+        expertNote: String
     },
     suggestion:{
         type:String,
@@ -27,6 +31,6 @@ const cropReportSchema=new mongoose.Schema({
         type:Date,
         default:Date.now
     }
-});
+},{timestamps:true});
 const cropReport = mongoose.model("CropReport",cropReportSchema);
 export default cropReport;

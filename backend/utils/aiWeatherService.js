@@ -3,37 +3,41 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI=new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model=genAI.getGenerativeModel({model:"gemini-2.5-flash"});
 
-export const generateWeatherAdvice=async(weatherData,crop,stage) => {  //weather data fetched from api
+export const generateWeatherAdvice=async(weatherData,crop,stage,language) => {  //weather data fetched from api
     try{
 
         const prompt = `
             Act as a hyper-local agricultural scientist.
-            
+            Return ONLY a valid JSON object. 
+
             Context: 
             - Location: ${weatherData.location}
             - Crop: ${crop}
             - Growth Stage: ${stage}
             - Weather: ${weatherData.temperature}°C, ${weatherData.humidity}% humidity, ${weatherData.weather}.
-            Task:
-            Provide a localized agricultural analysis for a farmer growing ${crop} at the ${stage} stage in ${weatherData.location}.
 
+            Task:
+            Provide agricultural analysis in the language: ${language}.
+            
+            Strict Rules:
+            1. The JSON KEYS must remain in English as defined below.
+            2. The VALUES (content) must be written in ${language}.
+            
             Required JSON Structure:
             {
-                "riskScore": "Low or Moderate or High",
+                "riskScore": "Low or Moderate or High (Keep these 3 labels in English)",
                 "riskPercentage": number (0-100),
-                "risks": ["risk1", "risk2", "risk3"],
-                "irrigationAdvice": "string",
-                "pesticideAdvice": "string",
-                "cropSafetyAdvice": "string"
+                "diseaseCategory": "Fungal or Pest or Water Stress or Nutrient Deficiency",
+                "risks": ["Translate risk here", "Translate risk here"],
+                "irrigationAdvice": "Translate advice here",
+                "pesticideAdvice": "Translate advice here",
+                "cropSafetyAdvice": "Translate advice here"
             }
 
-            Rules:
-            - Low = 0-39
-            - Moderate = 40-69
-            - High = 70-100
-
-            Tone: Professional and short yet very simple. Use terms a local farmer understands. Keep it concise.
+            Scale: Low (0-39), Moderate (40-69), High (70-100).
+            Tone: Simple, professional, and farmer-friendly.
         `;
+        
         const result = await model.generateContent(prompt);
         let responseText = result.response.text();
 

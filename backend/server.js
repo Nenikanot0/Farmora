@@ -7,7 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import cropRoutes from "./routes/cropRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js"
-
+import adminRoutes from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -29,7 +29,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/crop", cropRoutes);
 app.use("/api/weather",weatherRoutes);
-
+app.use("/api/admin",adminRoutes);
 
 app.get("/", (req, res) => { 
     res.send("KrishiMitra API Running");
