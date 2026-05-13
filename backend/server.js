@@ -13,32 +13,20 @@ const app = express();
 
 connectDB();
 
-const defaultDevOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174",
-];
-const envOrigins = (process.env.CORS_ORIGINS || "")
-  .split(",")
-  .map((o) => o.trim())
-  .filter(Boolean);
-const allowedOrigins = [...new Set([...defaultDevOrigins, ...envOrigins])];
-
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin) {
-        return callback(null, true);
-      }
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(null, false);
-    },
-    credentials: true,
+    origin: ["http://localhost:5174","http://localhost:5173",], // allow only frontend origin to access the api
+    credentials: true, // allows cookies /sessions /authorization headers
   })
 );
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }, //so that browser allows frontend to access the backend assets 
+    contentSecurityPolicy: false, // as csp block dev tools /external resouces or scripts
+  })
+);
+
 app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: false,
