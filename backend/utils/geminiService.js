@@ -1,7 +1,7 @@
 import {GoogleGenerativeAI} from "@google/generative-ai";
 
 
-const analyzeCropDisease = async(symptoms) => {
+const analyzeCropDisease = async(symptoms,language) => {
     try{
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);  //started a instance of gemini api service
         
@@ -9,17 +9,21 @@ const analyzeCropDisease = async(symptoms) => {
             model: "gemini-2.5-flash"
         });
         const prompt=`You are an agriculture expert.
-                Analyze these crop symptoms: ${symptoms}
-                
-                IMPORTANT: Return your response ONLY as a valid JSON object with the following keys:
+                Crop symptoms to analyze: ${symptoms}
+
+                Write all human-readable text (disease name, list items, expert note) in: ${language}.
+                Keep JSON keys exactly as below (English). Values must be in ${language}.
+                Use short, simple sentences suitable for farmers.
+
+                Return ONLY a valid JSON object with these keys:
                 {
                   "diseaseName": "string",
-                  "causes": ["list", "of", "strings"],
-                  "treatment": ["list", "of", "strings"],
-                  "prevention": ["list", "of", "strings"],
-                  "expertNote": "short friendly summary"
+                  "causes": ["string"],
+                  "treatment": ["string"],
+                  "prevention": ["string"],
+                  "expertNote": "string"
                 }
-                Do not include any markdown formatting like \`\`\`json.`;
+                Do not include markdown or code fences like \`\`\`json.`;
                 
         const result=await model.generateContent(prompt);
         let responseText=await result.response.text();

@@ -8,5 +8,4 @@ router.post("/",protect,getWeather);
 router.get("/history",protect,getMyWeatherReports);
 
 
-
 export default router;

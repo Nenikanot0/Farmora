@@ -23,7 +23,7 @@ export const getDashboardStats = async(req,res)=>{
         ]);
 
         const highRiskAlert = await WeatherRiskReport.countDocuments({
-            "farmingAnalysis.riskScore":"high"
+            "farmingAnalysis.riskScore":"High"
         });
 
         res.status(200).json({
@@ -41,10 +41,12 @@ export const getTopRiskyCrops= async(req,res) =>{
     try{
         const riskyCrops= await WeatherRiskReport.aggregate([
             {
-                $group:{ _id:"$crop" ,
+                $group:{ 
+                    _id:"$crop" ,
                     averageRisk:{ 
                         $avg: "$farmingAnalysis.riskPercentage" 
-                    },totalReports:{
+                    },
+                    totalReports:{
                         $sum:1
                     }
                 }
