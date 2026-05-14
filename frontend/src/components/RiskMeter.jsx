@@ -14,7 +14,7 @@ function RiskMeter({ risk }) {
         <span>Risk</span>
         <span>{pct}%</span>
       </div>
-      <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-slate-200">
+      <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-stone-200/90">
         <div
           className={`h-3 rounded-full transition-all ${barColor(pct)}`}
           style={{ width: `${pct}%` }}
