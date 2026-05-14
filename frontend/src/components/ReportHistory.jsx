@@ -13,31 +13,27 @@ function ReportHistory({ weatherReports = [], cropReports = [] }) {
 
   if (!hasWeather && !hasCrop) {
     return (
-      <p className="rounded-xl border border-dashed border-stone-300 bg-stone-50/90 px-4 py-10 text-center text-sm text-stone-600">
+      <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-600">
         No reports yet. Run a weather analysis or crop check to see history here.
       </p>
     );
   }
 
-  const listShell =
-    "mt-3 divide-y divide-stone-100 overflow-hidden rounded-2xl border border-stone-200/90 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.06)]";
-
   return (
     <div className="space-y-10">
       {hasWeather ? (
         <section>
-          <p className="dash-section-title">Weather</p>
-          <h3 className="mt-1 text-lg font-bold text-slate-900">Weather risk reports</h3>
-          <ul className={listShell}>
+          <h3 className="text-lg font-semibold text-slate-900">Weather risk reports</h3>
+          <ul className="mt-3 divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
             {weatherReports.map((r) => (
               <li key={r._id} className="px-4 py-4 text-sm sm:px-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-medium text-slate-900">
                     {r.location} · {r.crop}
                   </span>
-                  <span className="text-xs text-stone-500">{formatDate(r.createdAt)}</span>
+                  <span className="text-xs text-slate-500">{formatDate(r.createdAt)}</span>
                 </div>
-                <p className="mt-1 text-stone-600">
+                <p className="mt-1 text-slate-600">
                   Risk {r.farmingAnalysis?.riskPercentage ?? "—"}% ·{" "}
                   {r.farmingAnalysis?.riskScore ?? "—"} · {r.alertLevel ?? "—"}
                 </p>
@@ -49,16 +45,15 @@ function ReportHistory({ weatherReports = [], cropReports = [] }) {
 
       {hasCrop ? (
         <section>
-          <p className="dash-section-title">Crops</p>
-          <h3 className="mt-1 text-lg font-bold text-slate-900">Crop disease reports</h3>
-          <ul className={listShell}>
+          <h3 className="text-lg font-semibold text-slate-900">Crop disease reports</h3>
+          <ul className="mt-3 divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
             {cropReports.map((r) => (
               <li key={r._id} className="px-4 py-4 text-sm sm:px-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-semibold text-slate-900">{r.cropType}</span>
-                  <span className="text-xs text-stone-500">{formatDate(r.createdAt)}</span>
+                  <span className="font-medium text-slate-900">{r.cropType}</span>
+                  <span className="text-xs text-slate-500">{formatDate(r.createdAt)}</span>
                 </div>
-                <p className="mt-1 text-stone-600">
+                <p className="mt-1 text-slate-600">
                   {r.diseasePrediction?.diseaseName ?? "Analysis recorded"}
                 </p>
               </li>

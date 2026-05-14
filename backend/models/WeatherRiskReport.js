@@ -41,10 +41,6 @@ const weatherRiskReportSchema = new mongoose.Schema({
         type:String,
         enum:["Safe","Warning","Critical"],
         default:"Safe"
-    },
-    coordinates:{
-        lat:{ type:Number },
-        lng:{ type:Number }
     }
 },{timestamps:true});
 

@@ -2,35 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Leaflet + Tailwind: preflight breaks map tiles (max-width on img) */
-.leaflet-container {
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-.leaflet-container .leaflet-tile-pane img,
-.leaflet-container img.leaflet-tile {
-  max-width: none !important;
-}
-
-@layer base {
-  body {
-    @apply antialiased text-slate-800;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-      "Noto Sans", sans-serif;
-    background: linear-gradient(180deg, #f8faf8 0%, #f1f5f1 40%, #eef2f6 100%);
-    min-height: 100vh;
-  }
-}
-
-@layer components {
-  .dash-panel {
-    @apply rounded-2xl border border-stone-200/90 bg-white/95 p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-6 lg:p-8;
-  }
-  .dash-section-title {
-    @apply text-xs font-bold uppercase tracking-[0.12em] text-teal-800/90;
-  }
-  .dash-input {
-    @apply w-full rounded-xl border border-stone-300/90 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-stone-400 transition focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500/25;
-  }
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9fafb;
 }

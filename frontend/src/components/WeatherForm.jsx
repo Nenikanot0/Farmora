@@ -10,10 +10,10 @@ const initial = {
   language: "English",
 };
 
-const inputClass = "dash-input";
+const inputClass =
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20";
 
-const labelClass =
-  "mb-1 block text-xs font-semibold uppercase tracking-wide text-stone-600";
+const labelClass = "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600";
 
 function WeatherForm({ onSubmit, busy = false }) {
   const [formData, setFormData] = useState(initial);
@@ -33,8 +33,8 @@ function WeatherForm({ onSubmit, busy = false }) {
   return (
     <form onSubmit={submitHandler} className="flex flex-col gap-5">
       <fieldset className="min-w-0 space-y-3">
-        <legend className="dash-section-title mb-2">Location</legend>
-        <p className="text-xs text-stone-500">
+        <legend className={`${labelClass} mb-2`}>Location</legend>
+        <p className="text-xs text-slate-500">
           Enter at least one: village, city, or district (we use it to fetch weather).
         </p>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -126,7 +126,7 @@ function WeatherForm({ onSubmit, busy = false }) {
       <button
         type="submit"
         disabled={busy}
-        className="mt-1 w-full rounded-xl bg-gradient-to-r from-teal-600 to-emerald-700 py-3 text-sm font-semibold text-white shadow-md transition hover:from-teal-500 hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-teal-500/40 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-1 w-full rounded-lg bg-emerald-600 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {busy ? "Analyzing weather…" : "Get weather risk analysis"}
       </button>

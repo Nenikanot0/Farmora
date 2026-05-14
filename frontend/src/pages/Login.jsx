@@ -31,18 +31,17 @@ function Login() {
   return (
     <>
       <Navbar />
-      <div className="flex min-h-[calc(100vh-52px)] justify-center bg-gradient-to-b from-stone-100/80 via-teal-50/30 to-stone-50 px-4 py-12">
+      <div className="flex min-h-[calc(100vh-52px)] justify-center bg-slate-50 px-4 py-12">
         <form
           onSubmit={handleSubmit}
-          className="dash-panel w-full max-w-md border-l-4 border-l-teal-500 p-8"
+          className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm"
         >
-          <p className="dash-section-title">Account</p>
-          <h2 className="mt-2 text-2xl font-bold text-slate-900">Log in</h2>
-          <p className="mt-1 text-sm text-stone-600">
-            Use the account you registered with KrishiMitra.
+          <h2 className="text-2xl font-bold text-slate-900">Log in</h2>
+          <p className="mt-1 text-sm text-slate-600">
+            Use the account you registered with Farmora.
           </p>
 
-          <label className="mt-6 block text-sm font-medium text-stone-700" htmlFor="email">
+          <label className="mt-6 block text-sm font-medium text-slate-700" htmlFor="email">
             Email
           </label>
           <input
@@ -50,12 +49,12 @@ function Login() {
             type="email"
             autoComplete="email"
             required
-            className="dash-input mt-1.5"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
 
-          <label className="mt-4 block text-sm font-medium text-stone-700" htmlFor="password">
+          <label className="mt-4 block text-sm font-medium text-slate-700" htmlFor="password">
             Password
           </label>
           <input
@@ -63,7 +62,7 @@ function Login() {
             type="password"
             autoComplete="current-password"
             required
-            className="dash-input mt-1.5"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
@@ -71,19 +70,19 @@ function Login() {
           <button
             type="submit"
             disabled={busy}
-            className="mt-6 w-full rounded-xl bg-gradient-to-r from-teal-600 to-emerald-700 py-3 text-sm font-semibold text-white shadow-md transition hover:from-teal-500 hover:to-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-6 w-full rounded-lg bg-emerald-600 py-2.5 text-sm font-semibold text-white shadow hover:bg-emerald-700 disabled:opacity-60"
           >
             {busy ? "Signing in…" : "Sign in"}
           </button>
 
-          <p className="mt-6 text-center text-sm text-stone-600">
+          <p className="mt-6 text-center text-sm text-slate-600">
             New here?{" "}
-            <Link to="/register" className="font-semibold text-teal-700 hover:underline">
+            <Link to="/register" className="font-semibold text-emerald-700 hover:underline">
               Create an account
             </Link>
           </p>
           <p className="mt-2 text-center text-sm">
-            <Link to="/" className="text-stone-500 hover:text-slate-900">
+            <Link to="/" className="text-slate-500 hover:text-slate-800">
               ← Back to home
             </Link>
           </p>
