@@ -38,7 +38,7 @@ function Login() {
         >
           <h2 className="text-2xl font-bold text-slate-900">Log in</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Use the account you registered with KrishiMitra.
+            Use the account you registered with Farmora.
           </p>
 
           <label className="mt-6 block text-sm font-medium text-slate-700" htmlFor="email">

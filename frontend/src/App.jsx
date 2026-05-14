@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import DiseaseHotspots from "./pages/DiseaseHotspots";
 import { useAuth } from "./context/AuthContext";
 
 function RootRedirect() {
@@ -42,6 +42,14 @@ function App() {
           element={
             <ProtectedRoute adminOnly>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/disease-hotspots"
+          element={
+            <ProtectedRoute adminOnly>
+              <DiseaseHotspots />
             </ProtectedRoute>
           }
         />

@@ -17,12 +17,12 @@ export const uploadCropImage = async (req, res) => {
 
 export const analyzeSymptoms = async (req, res) => {
     try {
-        const { cropType, symptoms } = req.body;
-        const language =
-            (req.body.language || "English").toString().trim() || "English";
+        const { cropType, symptoms, language = "English" } = req.body;
 
-        if (!symptoms?.trim() || !cropType?.trim()) {
-            return res.status(400).json({ message: "Please provide crop type and symptoms" });
+        if (!cropType?.trim() || !symptoms?.trim()) {
+            return res.status(400).json({
+                message: "Please provide crop type and symptoms"
+            });
         }
 
         const analysis = await analyzeCropDisease(symptoms, language);

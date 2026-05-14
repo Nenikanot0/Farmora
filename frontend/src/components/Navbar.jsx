@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <nav className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-700 bg-emerald-700 px-4 py-3 text-white shadow">
       <Link to="/" className="text-lg font-bold tracking-tight hover:opacity-90">
-        KrishiMitra
+        Farmora
       </Link>
 
       <div className="flex flex-wrap items-center gap-4 text-sm font-medium">
@@ -24,9 +24,14 @@ function Navbar() {
                 Dashboard
               </Link>
             ) : (
-              <Link to="/admin" className="hover:underline">
-                Admin
-              </Link>
+              <>
+                <Link to="/admin" className="hover:underline">
+                  Admin
+                </Link>
+                <Link to="/disease-hotspots" className="hover:underline">
+                  Disease Hotspots
+                </Link>
+              </>
             )}
             <span className="hidden text-emerald-100 sm:inline">{user.name}</span>
             <button

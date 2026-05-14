@@ -11,7 +11,7 @@ export const getWeatherByCity=async(locationName) =>{
             throw new Error("Location not found");
         }
         
-        const {lat,lon,name,country}=geoResponse.data[0];
+        const {lat,lng,name,country}=geoResponse.data[0];
 
         // Step 2: Get weather from coordinates
         const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.WEATHER_API_KEY}`;
@@ -26,7 +26,7 @@ export const getWeatherByCity=async(locationName) =>{
             humidity:weatherData.main.humidity,
             weather:weatherData.weather[0].description,
             windSpeed:weatherData.wind.speed,
-            coord:{lat,lon}
+            coordinates:{lat,lng}
         };
 
     }catch(error){

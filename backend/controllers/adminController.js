@@ -194,7 +194,7 @@ export const getDiseaseHotspots = async(req,res) => {
             {
                 $group:{
                     _id:{
-                        city:"$city",
+                        location:"$location",
                         disease:"$farmingAnalysis.diseaseCategory"
                     },
                     cases:{
@@ -202,6 +202,9 @@ export const getDiseaseHotspots = async(req,res) => {
                     },
                     averageRisk:{
                         $avg:"$farmingAnalysis.riskPercentage"
+                    },
+                    coordinates:{
+                        $first:"$coordinates"
                     }
                 }
             },

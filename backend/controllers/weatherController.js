@@ -48,10 +48,11 @@ export const getWeather=async(req,res) => {
         if(!validStages.includes(stage.toLowerCase())){
             return res.status(400).json({message:"Please provide a correct crop stage."});
         }
-
-        const farmingAdvice=await generateWeatherAdvice(weatherData,crop,stage,language); 
+        const lat=weatherData.coordinates.lat;
+        const lng=weatherData.coordinates.lng;
+        const farmingAnalysis=await generateWeatherAdvice(weatherData,crop,stage,language); 
         
-        const alertLevel =  farmingAdvice.riskPercentage>=85 ? "Critical" : farmingAdvice.riskPercentage >= 70 ? "Warning" : "Safe";
+        const alertLevel =  farmingAnalysis.riskPercentage>=85 ? "Critical" : farmingAnalysis.riskPercentage >= 70 ? "Warning" : "Safe";
 
         if(alertLevel==="Critical"){
             //replace print to sms api,whatsapp api or email 
@@ -65,7 +66,8 @@ export const getWeather=async(req,res) => {
             stage,
             language,
             weatherData,
-            farmingAnalysis:farmingAdvice,
+            farmingAnalysis,
+            coordinates:{lat,lng},
             alertLevel
         });
 

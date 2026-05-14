@@ -8,7 +8,7 @@ function Home() {
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-slate-50">
       <header className="border-b border-emerald-100 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <span className="text-xl font-bold text-emerald-800">KrishiMitra</span>
+          <span className="text-xl font-bold text-emerald-800">Farmora</span>
           <div className="flex gap-3 text-sm font-medium">
             {user ? (
               <Link
@@ -45,7 +45,7 @@ function Home() {
           Weather risk and crop health in one place
         </h1>
         <p className="mt-6 text-lg text-slate-600">
-          KrishiMitra connects your farm to live weather, AI-guided risk scores, and symptom-based
+          Farmora connects your farm to live weather, AI-guided risk scores, and symptom-based
           disease hints—so you can irrigate, protect, and plan with clearer signals.
         </p>
         {!user ? (
