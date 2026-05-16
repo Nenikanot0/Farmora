@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI=new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model=genAI.getGenerativeModel({model:"gemini-2.5-flash"});
 
-export const generateWeatherAdvice=async(weatherData,crop,stage,language) => {  //weather data fetched from api
+export const generateWeatherAdvice=async(weatherData,location,crop,stage,language) => {  //weather data fetched from api
     try{
 
         const prompt = `
@@ -11,7 +11,7 @@ export const generateWeatherAdvice=async(weatherData,crop,stage,language) => {  
             Return ONLY a valid JSON object. 
 
             Context: 
-            - Location: ${weatherData.location}
+            - Location: ${location}
             - Crop: ${crop}
             - Growth Stage: ${stage}
             - Weather: ${weatherData.temperature}°C, ${weatherData.humidity}% humidity, ${weatherData.weather}.
@@ -55,7 +55,15 @@ export const generateWeatherAdvice=async(weatherData,crop,stage,language) => {  
 
         const jsonString = responseText.substring(firstChar, lastChar + 1); //extracts the info between '{' and '}' only
 
-        return JSON.parse(jsonString);  //converts to json string to object
+        let parsed;
+
+        try {
+            parsed = JSON.parse(jsonString);
+        } catch (e) {
+            throw new Error("Invalid AI JSON format");
+        }
+
+        return parsed;
 
     }catch(error){
         throw new Error("AI weather advice failed: " + error.message);

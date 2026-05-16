@@ -1,6 +1,8 @@
 import { generateWeatherAdvice } from "../utils/aiWeatherService.js"; //from gemini
 import {getWeatherByCity} from "../utils/weatherService.js"; //get weather of city
 import WeatherRiskReport from "../models/WeatherRiskReport.js";
+import { sendAlertEmail} from "../utils/emailService.js";
+import {sendSMSAlert } from "../utils/smsService.js";
 
 export const getWeather=async(req,res) => {
     try{
@@ -13,36 +15,31 @@ export const getWeather=async(req,res) => {
             return res.status(400).json({message:"Please provide a village, city, or district name."});
         }
         
-        let weatherData=null;
-        let resolvedAt="";
+        const locations = [
+        { value: village, type: "village" },
+        { value: city, type: "city" },
+        { value: district, type: "district" },
+        ];
 
-        let location="";
-        try{
-            if(village){
-                weatherData=await getWeatherByCity(village);
-                location=village;
-                resolvedAt="village";
-            }
-        }catch(err){}
+        let weatherData = null;
+        let resolvedAt = "";
+        let location = "";
 
-        if(!weatherData && city){
-            try{
-                weatherData=await getWeatherByCity(city);
-                location=city;
-                resolvedAt="city";
-            }catch(err){}
+        for (const place of locations) {
+        if (!place.value) continue;
+
+        try {
+            weatherData = await getWeatherByCity(place.value);
+            location = place.value;
+            resolvedAt = place.type;
+            break;
+        } catch {
+            // Try next location(input)
         }
-        
-        if(!weatherData && district){
-            try{
-                weatherData=await getWeatherByCity(district);
-                location=district;
-                resolvedAt="district";
-            }catch(err){}
         }
 
         if (!weatherData) {
-            throw new Error("Location not recognized by weather service.");
+        throw new Error("Location not recognized by weather service.");
         }
 
         if(!validStages.includes(stage.toLowerCase())){
@@ -50,13 +47,24 @@ export const getWeather=async(req,res) => {
         }
         const lat=weatherData.coordinates.lat;
         const lng=weatherData.coordinates.lng;
-        const farmingAnalysis=await generateWeatherAdvice(weatherData,crop,stage,language); 
+        const farmingAnalysis=await generateWeatherAdvice(weatherData,location,crop,stage,language); 
         
         const alertLevel =  farmingAnalysis.riskPercentage>=85 ? "Critical" : farmingAnalysis.riskPercentage >= 70 ? "Warning" : "Safe";
 
         if(alertLevel==="Critical"){
             //replace print to sms api,whatsapp api or email 
-            console.log(`Alert: ${crop} in ${location} at ${stage} stage has CRITICAL risk`);
+            // 1. Build a compact, single-line string template
+            const baseMessage = `CRITICAL ALERT - Crop: ${crop} | City: ${city} | Stage: ${stage} | Risk: ${farmingAnalysis.riskPercentage}% (${farmingAnalysis.diseaseCategory}). Advice: ${farmingAnalysis.cropSafetyAdvice}`;
+
+            // 2. Ensure it strictly fits within the 160-character limit for Twilio Trial Accounts
+            const alertMessage = baseMessage.length > 160 
+                ? baseMessage.substring(0, 157) + "..." 
+                : baseMessage;
+            
+            //email
+            await sendAlertEmail(process.env.FARMER_ALERT_EMAIL,"Critical Crop Risk Alert - ",alertMessage);
+            //sms
+            await sendSMSAlert(process.env.FARMER_ALERT_PHONE,alertMessage);
         }
 
         const savedReport = await WeatherRiskReport.create({

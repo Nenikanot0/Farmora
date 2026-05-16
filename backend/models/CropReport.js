@@ -24,16 +24,6 @@ const cropReportSchema=new mongoose.Schema({
         prevention: [String],
         expertNote: String
     },
-    coordinates:{
-        lat:{
-            type:Number,
-            required:true
-        },
-        lng:{
-            type:Number,
-            required:true
-        }
-    },
     suggestion:{
         type:String,
     },

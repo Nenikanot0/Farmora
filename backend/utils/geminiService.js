@@ -43,7 +43,15 @@ const analyzeCropDisease = async(symptoms,language) => {
 
         const jsonString = responseText.substring(firstChar, lastChar + 1);
 
-        return JSON.parse(jsonString);
+        let parsed;
+
+        try {
+            parsed = JSON.parse(jsonString);
+        } catch (e) {
+            throw new Error("Invalid AI JSON format");
+        }
+
+        return parsed;
 
     } catch (error){
         throw new Error("AI analysis failed: " + error.message);

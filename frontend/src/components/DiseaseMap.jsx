@@ -32,15 +32,16 @@ return (
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                {hotspots.map(
-                    (spot, index) => (
+                {hotspots
+                    .filter(spot => spot?.coordinates?.lat && spot?.coordinates?.lng)
+                    .map((spot, index) => (
                         <CircleMarker
                             key={index}
                             center={[
                                 spot.coordinates.lat,
                                 spot.coordinates.lng
                             ]}
-                            radius={ Math.min(spot.cases / 2,25) }
+                            radius={Math.min(spot.cases / 2, 25)}
                         >
                             <Popup>
                                 <div>

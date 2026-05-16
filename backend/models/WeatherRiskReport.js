@@ -37,6 +37,16 @@ const weatherRiskReportSchema = new mongoose.Schema({
         pesticideAdvice: String,
         cropSafetyAdvice: String
     },
+    coordinates:{
+        lat:{
+            type:Number,
+            required:true
+        },
+        lng:{
+            type:Number,
+            required:true
+        }
+    },
     alertLevel:{
         type:String,
         enum:["Safe","Warning","Critical"],

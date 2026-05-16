@@ -73,7 +73,7 @@ export const getCityRiskTrends=async (req,res) =>{
         const cityRisk = await WeatherRiskReport.aggregate([
             {
                 $group:{
-                    _id:"$city",
+                    _id:"$location",
                     averageRisk:{
                         $avg:"$farmingAnalysis.riskPercentage"
                     },

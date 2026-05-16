@@ -1,4 +1,5 @@
 function AlertBanner({ level }) {
+
   if (!level || level === "Safe") return null;
 
   const isCritical = level === "Critical";
