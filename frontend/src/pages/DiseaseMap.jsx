@@ -1,27 +1,26 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../services/api.js";
 
-import { MapContainer,TileLayer,CircleMarker,Popup } from "react-leaflet";
+import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-const DiseaseMap =() => {
-    const [hotspots,setHotspots] = useState([]);
+const DiseaseMap = () => {
+    const [hotspots, setHotspots] = useState([]);
 
     useEffect(() => {
-        const fetchHotspots = async()=> {
-            try{
+        const fetchHotspots = async () => {
+            try {
                 const response = await API.get("/admin/disease-hotspots");
-                
                 setHotspots(response.data);
-            }catch(error){
+            } catch (error) {
                 console.log(error);
             }
         };
         fetchHotspots();
-    },[]);
+    }, []);
 
-return (
+    return (
         <div className="h-[600px] w-full rounded-xl overflow-hidden shadow-lg">
             <MapContainer
                 center={[20.5937, 78.9629]}
@@ -50,21 +49,18 @@ return (
                                             spot._id.location
                                         }
                                     </h2>
-
                                     <p>
                                         Disease:
                                         {
                                             spot._id.disease
                                         }
                                     </p>
-
                                     <p>
                                         Cases:
                                         {
                                             spot.cases
                                         }
                                     </p>
-
                                     <p>
                                         Avg Risk:
                                         {
@@ -75,7 +71,7 @@ return (
                             </Popup>
                         </CircleMarker>
                     )
-                )}
+                    )}
             </MapContainer>
         </div>
     );

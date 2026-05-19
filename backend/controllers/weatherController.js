@@ -52,11 +52,8 @@ export const getWeather=async(req,res) => {
         const alertLevel =  farmingAnalysis.riskPercentage>=85 ? "Critical" : farmingAnalysis.riskPercentage >= 70 ? "Warning" : "Safe";
 
         if(alertLevel==="Critical"){
-            //replace print to sms api,whatsapp api or email 
-            // 1. Build a compact, single-line string template
             const baseMessage = `CRITICAL ALERT - Crop: ${crop} | City: ${city} | Stage: ${stage} | Risk: ${farmingAnalysis.riskPercentage}% (${farmingAnalysis.diseaseCategory}). Advice: ${farmingAnalysis.cropSafetyAdvice}`;
-
-            // 2. Ensure it strictly fits within the 160-character limit for Twilio Trial Accounts
+            
             const alertMessage = baseMessage.length > 160 
                 ? baseMessage.substring(0, 157) + "..." 
                 : baseMessage;

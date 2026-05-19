@@ -1,39 +1,63 @@
-import axios from "axios";
+// src/services/api.js
+import axios from 'axios';
 
-const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
+// Request interceptor to add token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
+// Response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
   }
+);
 
-  return req;
-});
+//auth api
+export const register = (data) => api.post('/auth/register', data);
+export const login = (data) => api.post('/auth/login', data);
 
-// AUTH
-export const registerUser = (data) => API.post("/auth/register", data);
-export const loginUser = (data) => API.post("/auth/login", data);
-
-// WEATHER
-export const getWeatherAnalysis = (data) => API.post("/weather", data);
-export const getWeatherHistory = () => API.get("/weather/history");
-
-// CROP
-export const getCropReports = () => API.get("/crop/my-reports");
+//crop api
+export const getMyCropReports = () => api.get('/crop/my-reports');
 export const analyzeCrop = (formData) =>
-  API.post("/crop/analyze", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+  api.post('/crop/analyze', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
   });
 
-// ADMIN
-export const getAdminStats = () => API.get("/admin/dashboard");
-export const getTopRiskyCrops = () => API.get("/admin/top-risky-crops");
-export const getCriticalAlerts = () => API.get("/admin/critical-alerts");
-export const getHighRiskAlerts = () => API.get("/admin/high-risk-alerts");
-export const getMonthlyRiskTrends = () => API.get("/admin/monthly-risk-trends");
+//weather api
+export const analyzeWeather = (data) => api.post('/weather', data);
+export const getMyWeatherReports = () => api.get('/weather/history');
 
-export default API;
+//admin api
+export const getDashboardStats = () => api.get('/admin/dashboard');
+export const getTopRiskyCrops = () => api.get('/admin/top-risky-crops');
+export const getCityRiskTrends = () => api.get('/admin/city-risk-trends');
+export const getMonthlyRiskTrends = () => api.get('/admin/monthly-risk-trends');
+export const getHighRiskAlerts = () => api.get('/admin/high-risk-alerts');
+export const getDiseaseCategoryAnalytics = () => api.get('/admin/disease-category-analytics');
+export const getDiseaseHotspots = () => api.get('/admin/disease-hotspots');
+export const getCriticalAlerts = () => api.get('/admin/critical-alerts');
+
+export default api;

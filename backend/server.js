@@ -6,9 +6,9 @@ import helmet from 'helmet';
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import cropRoutes from "./routes/cropRoutes.js";
-import weatherRoutes from "./routes/weatherRoutes.js"
+import weatherRoutes from "./routes/weatherRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-
+import marketRoutes from "./routes/marketRoutes.js";
 const app = express();
 
 connectDB();
@@ -20,17 +20,12 @@ app.use(
   })
 );
 
-app.use(
-  helmet({
+app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }, //so that browser allows frontend to access the backend assets 
     contentSecurityPolicy: false, // as csp block dev tools /external resouces or scripts
-  })
-);
+  }));
 
-app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-    contentSecurityPolicy: false,
-}));
+
 
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
@@ -43,9 +38,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/crop", cropRoutes);
 app.use("/api/weather",weatherRoutes);
 app.use("/api/admin",adminRoutes);
+app.use("/api/market",marketRoutes);
+
 
 app.get("/", (req, res) => { 
-    res.send("KrishiMitra API Running");
+    res.send("Farmora API Running");
 });
 
 // 2. Catch-all 404 (MUST BE LAST)

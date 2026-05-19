@@ -9,7 +9,6 @@ export const getDashboardStats = async(req,res)=>{
 
         const totalReports=await WeatherRiskReport.countDocuments();
 
-
         //Average risk
         const avgRisk= await WeatherRiskReport.aggregate([
             {

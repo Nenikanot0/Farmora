@@ -1,8 +1,4 @@
-/**
- * All languages in the Eighth Schedule of the Indian Constitution, plus English.
- * `value` is the English name sent to the API for AI output (prompt-friendly).
- */
-export const INDIAN_ADVICE_LANGUAGES = [
+export const languages = [
   { value: "English", label: "English" },
   { value: "Hindi", label: "Hindi — हिन्दी" },
   { value: "Bengali", label: "Bengali — বাংলা" },
