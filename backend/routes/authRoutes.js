@@ -5,8 +5,6 @@ const router=express.Router();  //creates a routes for all authentication relate
 
 
 router.post("/register",registerUser);
-
 router.post("/login",loginUser);
-
 
 export default router;

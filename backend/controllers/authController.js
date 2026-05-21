@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs"; //encryption
 import jwt from "jsonwebtoken"; //token creation
 
+
 export const registerUser=async(req,res) => {
     try{
         const {name,email,password,role = "farmer"}=req.body;
@@ -98,7 +99,4 @@ export const loginUser= async(req,res) => {
         });
     }
 };
-
-
-
 

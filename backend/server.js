@@ -13,26 +13,23 @@ const app = express();
 
 connectDB();
 
-app.use(
-  cors({
-    origin: ["http://localhost:5174","http://localhost:5173",], // allow only frontend origin to access the api
-    credentials: true, // allows cookies /sessions /authorization headers
-  })
-);
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // fallback for your local testing
+  credentials: true, // required if you are handling JWT cookies or sessions
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }, //so that browser allows frontend to access the backend assets 
     contentSecurityPolicy: false, // as csp block dev tools /external resouces or scripts
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" } 
   }));
 
 
 
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-
-// --- ROUTES ---
-
-// server.js
 
 app.use("/api/auth", authRoutes);
 app.use("/api/crop", cropRoutes);
@@ -45,7 +42,6 @@ app.get("/", (req, res) => {
     res.send("Farmora API Running");
 });
 
-// 2. Catch-all 404 (MUST BE LAST)
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found on server" });
 });

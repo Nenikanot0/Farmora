@@ -17,7 +17,6 @@ const WeatherAnalysis = () => {
   });
 
   const stages = ['seedling', 'vegetative', 'flowering', 'harvest'];
-  // const languages = ['English', 'Hindi', 'Marathi', 'Tamil', 'Telugu', 'Kannada'];
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -145,7 +144,6 @@ const WeatherAnalysis = () => {
                   className="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-emerald-500 outline-none bg-white text-sm"
                 >
                   {languages.map((l) => (
-                    /* FIXED: Accessing .value for the key/HTML attribute, and .label for the visual dropdown text */
                     <option key={l.value} value={l.value}>
                       {l.label}
                     </option>
