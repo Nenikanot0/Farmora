@@ -13,9 +13,22 @@ const app = express();
 
 connectDB();
 
+//cors
+const allowedOrigins = [
+  'https://farmora-zeta.vercel.app',
+  'http://localhost:5173' // for local development
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // fallback for your local testing
-  credentials: true, // required if you are handling JWT cookies or sessions
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'), false);
+    }
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
